@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="assets/css/custom.css">
         <script src="jquery-3.0.0.min.js"></script>
         <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
         <style>
             body{
-                font-family: tahoma;
+                font-family: Raleway-Regular;
+            }
+            button{
+              background-color: #4267B2;
+              border:none;
+              border-radius: 2px;
+              color:#fff;
+              font-size: 16px;
+              padding: 10px;
+              box-shadow: 1px 1px 10px rgba(0,0,0,1);
+            }
+            input[type="text"]{
+              padding: 10px;
+
             }
             .message {
+                box-shadow: 1px 1px 10px rgba(0,0,0,1);
                 background-color: #000;
                 border: 1px solid #dcdcdc;
                 color: #20c20e;
-                font-family: courier new;
+                font-family: Raleway-Regular;
                 margin-top: 84px;
                 min-height: 250px;
                 padding: 2px 45px;
@@ -19,29 +34,32 @@
                 width: 50%;
                 word-wrap: break-word;
             }
+            b{
+              color:#fff;
+            }
         </style>
     </head>
     <body>
         <div align="center">
-            <input value="+1" id="country_code" />
-            <input placeholder="phone number" id="phone_number"/>
+            <input type="text" value="+92" id="country_code" />
+            <input type="text" placeholder="phone number" id="phone_number"/>
             <button onclick="smsLogin();">Login via SMS</button>
-            <div>OR</div>
-            <input placeholder="email" id="email"/>
+            <h2>OR</h2>
+            <input type="text" placeholder="email" id="email"/>
             <button onclick="emailLogin();">Login via Email</button>
             <div class="message">
-                <p><center><h2>Message Board</h2></center></p>
+                <p><h2 align="center" style="box-shadow: 1px 1px 10px rgba(255,255,255,1);">Message Board</h2></p>
             </div>
         </div>
         <script>
           //https://developers.facebook.com/docs/accountkit/webjs
-          $(".message").append("<p>initialized Account Kit.</p>");
+          $(".message").append("<p><b>initialized Account Kit.</b></p>");
           // initialize Account Kit with CSRF protection
           AccountKit_OnInteractive = function(){
             AccountKit.init(
               {
-                appId:"FB_APP_ID", // you facebook app id here
-                state:"CSRF_TOKEN_HERE", // type any charcters here for protection
+                appId:"APP_ID", // you facebook app id here
+                state:"CSRF", // type any charcters here for protection
                 version:"v1.0", //v1.0
                 debug:true,
                 fbAppEventsEnabled:true
@@ -68,11 +86,11 @@
             if (response.status === "PARTIALLY_AUTHENTICATED") {
               var code = response.code;
               var csrf = response.state;
-                $(".message").append("<p>Received auth token from facebook -  "+ code +".</p>");
-                $(".message").append("<p>Triggering AJAX for server-side validation.</p>");
+                $(".message").append("<p><b>Received auth token from facebook</b> -  "+ code +"</p>");
+                $(".message").append("<p><b>Triggering AJAX for server-side validation.</b></p>");
                 
                 $.post("verify.php", { code : code, csrf : csrf }, function(result){
-                    $(".message").append( "<p>Server response : " + result + "</p>" );
+                    $(".message").append( "<p><b>Server response : </b>" + result + "</p>" );
                 });
                 
             }
@@ -103,7 +121,7 @@
           // email form submission handler
           function emailLogin() {
             var emailAddress = document.getElementById("email").value;
-            $(".message").append("<p>Triggering email validation.</p>");
+            $(".message").append("<p><b>Triggering email validation.</b></p>");
             AccountKit.login(
               'EMAIL',
               {emailAddress: emailAddress},
